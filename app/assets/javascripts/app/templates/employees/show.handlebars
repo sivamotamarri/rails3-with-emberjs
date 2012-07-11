@@ -1,0 +1,18 @@
+<td>{{employee.id}}</td>
+
+  {{#if isEditing}}
+  <td class="data" colspan="4">  {{view App.EditEmployeeView}}</td>
+  {{else}}  
+   <td class="data">   {{employee.fullName}}</td>
+   <td class="data">  {{employee.city}}</td>
+   <td>{{employee.age}}</td>
+  {{/if}}
+
+<td class="data">
+  <div class="commands">
+    {{#unless isEditing}}
+      <a href="#" {{action "showEdit"}}>Edit</a>
+      <a href="#" {{action "destroyRecord"}}>Remove</a>
+    {{/unless}}
+  </div>
+</td>

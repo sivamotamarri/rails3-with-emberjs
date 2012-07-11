@@ -1,0 +1,26 @@
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>City</th>
+      <th>Age</th>
+    </tr>
+  </thead>
+  <tbody>
+  {{#each employees}}
+    {{view App.ShowEmployeeView employeeBinding="this"}}
+  {{/each}}
+  {{#if isNewVisible}}
+    <tr>
+      <td>*</td>
+      <td colspan="4">
+        {{view App.NewEmployeeView}}
+      </td>
+    </tr>
+  {{/if}}
+  </tbody>
+</table>
+<div class="commands">
+  <a href="#" {{action "showNew"}}>New Employee</a>  
+</div>
