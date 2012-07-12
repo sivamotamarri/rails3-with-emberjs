@@ -28,6 +28,7 @@ App.NewEmployeeView = Ember.View.extend({
       })
       .done(function() {
         App.employeesController.pushObject(employee);
+        App.employeesController.set("totalValues",App.employeesController.get("totalValues")+1);
         self.get("parentView").hideNew();
       });
   }

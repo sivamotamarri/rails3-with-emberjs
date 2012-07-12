@@ -24,6 +24,7 @@ App.ShowEmployeeView = Ember.View.extend({
       })
       .done(function() {
         App.employeesController.removeObject(employee);
+        App.employeesController.set("totalValues",App.employeesController.get("totalValues")-1);
       });
   }
 });

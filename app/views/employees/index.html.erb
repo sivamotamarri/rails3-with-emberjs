@@ -6,7 +6,7 @@
 
 <script type="text/javascript">
   $(function() {
-    App.employeesController.loadAll(<%= @employees.to_json.html_safe %>);
+    App.employeesController.loadValuesUpto(<%= @employees.to_json.html_safe %>,<%= @employees.total_entries %>);
   });
 </script>
 
