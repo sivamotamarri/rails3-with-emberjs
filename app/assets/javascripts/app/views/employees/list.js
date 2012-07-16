@@ -42,6 +42,11 @@ App.ListEmployeesView = Ember.View.extend({
     },
 
     showNew: function() {
+         $.ajax({
+            url: "/employees/new",
+            dataType: 'json'
+            } );
+
         this.set('isNewVisible', true);
     },
 

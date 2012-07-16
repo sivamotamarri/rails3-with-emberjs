@@ -20,17 +20,51 @@ class EmployeesController < ApplicationController
     end
   end
 
+  def new
+    session[:employee_step] = session[:employee_params] = nil
+    session[:employee_params] ||= {}
+      respond_to do |format|
+         format.json { render json: {"new" => "ok"} }
+      end
+  end
+
   # POST /employees
   # POST /employees.json
   def create
-    @employee = Employee.new(params[:employee])
-
+    if session[:employee_params].nil?
+      session[:employee_params] ||= {}
+      session[:employee_step] = nil
+      session[:employee_params].deep_merge!(params[:employee]) if params[:employee]
+    else
+      session[:employee_params].deep_merge!(params[:employee]) if params[:employee]
+    end    
+    @employee = Employee.new( session[:employee_params])
+    
+    @employee.current_step = session[:employee_step]
     respond_to do |format|
-      if @employee.save        
-        format.json { render json: @employee, status: :created, location: @employee }
-      else        
-        format.json { render json: @employee.errors, status: :unprocessable_entity }
+
+     if @employee.valid?
+      if params[:back_button]
+        @employee.previous_step
+        session[:employee_step] = @employee.current_step
+      elsif @employee.last_step?
+        @employee.save if @employee.all_valid?
+         session[:employee_step] = session[:employee_params] = nil
+         format.json { render json: @employee, status: :created, location: @employee }
+      else
+        @employee.next_step
+        session[:employee_step] = @employee.current_step
       end
+      format.json { render json: {"new" => "ok"} }
+      
+     else
+       format.json { render json: @employee.errors, status: :unprocessable_entity }
+    end
+#      if @employee.save
+#        format.json { render json: @employee, status: :created, location: @employee }
+#      else
+#        format.json { render json: @employee.errors, status: :unprocessable_entity }
+#      end
     end
   end
 
