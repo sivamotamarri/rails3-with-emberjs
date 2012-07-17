@@ -11,7 +11,7 @@ App.Employee  = Ember.Resource.extend({
       return 'Employee require a first, last name and city , age.';
     }
   },
-  saveEmp: function(isMyNew) {
+  saveEmp: function(isMyNew,btnVal) {
     var self = this;
     if (this.validate !== undefined) {
       var error = this.validate();
@@ -25,7 +25,7 @@ App.Employee  = Ember.Resource.extend({
     }
 
     return this._resourceRequest({type: isMyNew ? 'PUT' : 'POST',
-                                  data: this.serialize()})
+                                  data: {"key1": this.serialize(), "back_button": btnVal}})
       .done(function(json) {
         // Update properties
         if (json) self.deserialize(json);

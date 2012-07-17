@@ -3,7 +3,7 @@ App.NewEmployeeView = Ember.View.extend({
   templateName: 'app/templates/employees/new',
   emp: null,
   isSaveEmp: null,
-  
+  classNames: ['ember-view', 'my-other-class'],
 
   init: function() {
     this._super();
@@ -42,16 +42,23 @@ App.NewEmployeeView = Ember.View.extend({
     this.set('secondStepValue',false);
     this.set('lastStepValue',true);
   },
+  nextSubmit: function(){
+
+    this.submit("next");
+  },
+  prevSubmit: function(){
+    
+    this.submit("prev");
+  },
 
 
   submit: function(event) {
+    var actionValue = event
     var self = this;
     var employee = this.get("employee");
+   
 
-
-    event.preventDefault();
-
-    employee.saveEmp(self.get("isSaveEmp"))
+    employee.saveEmp(self.get("isSaveEmp"),actionValue)
       .fail( function(e) {
         App.displayError(e);
       })
@@ -62,17 +69,29 @@ App.NewEmployeeView = Ember.View.extend({
            self.set("isSaveEmp",false);
          }
          else if (self.get("secondStepValue") === true){
+            if(actionValue === "next"){
              self.set("emp", self.get("emp")+ employee);
              self.lastStep();
              self.set("isSaveEmp",false);
+            }else{
+              self.firstStep();
+            }
          }
          else if(self.get("lastStepValue") === true){
+          if(actionValue === "next"){
            self.set("emp", self.get("emp")+ employee);
-           App.employeesController.pushObject(self.get("emp"));
            App.employeesController.set("totalValues",App.employeesController.get("totalValues")+1);
            self.get("parentView").hideNew();
            self.set("isSaveEmp",true);
+           App.employeesController.pushObject(employee);
+          }
+          else{
+               self.secondStep();
+            }
          }       
       });
+
+
   }
 });
+

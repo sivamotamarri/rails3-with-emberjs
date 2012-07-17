@@ -34,37 +34,37 @@ class EmployeesController < ApplicationController
     if session[:employee_params].nil?
       session[:employee_params] ||= {}
       session[:employee_step] = nil
-      session[:employee_params].deep_merge!(params[:employee]) if params[:employee]
+      session[:employee_params].deep_merge!(params[:key1][:employee]) if params[:key1][:employee]
     else
-      session[:employee_params].deep_merge!(params[:employee]) if params[:employee]
+      session[:employee_params].deep_merge!(params[:key1][:employee]) if params[:key1][:employee]
     end    
     @employee = Employee.new( session[:employee_params])
     
     @employee.current_step = session[:employee_step]
     respond_to do |format|
 
-     if @employee.valid?
-      if params[:back_button]
+     
+      if params[:back_button] == "prev"
         @employee.previous_step
         session[:employee_step] = @employee.current_step
+        format.json { render json: {"new" => "ok"} }
       elsif @employee.last_step?
+       if @employee.valid?     
         @employee.save if @employee.all_valid?
          session[:employee_step] = session[:employee_params] = nil
          format.json { render json: @employee, status: :created, location: @employee }
+          else
+         format.json { render json: @employee.errors, status: :unprocessable_entity }
+        end       
       else
-        @employee.next_step
-        session[:employee_step] = @employee.current_step
+        if @employee.valid?         
+         @employee.next_step
+         session[:employee_step] = @employee.current_step
+         format.json { render json: {"new" => "ok"} }
+        else
+         format.json { render json: @employee.errors, status: :unprocessable_entity }
+        end
       end
-      format.json { render json: {"new" => "ok"} }
-      
-     else
-       format.json { render json: @employee.errors, status: :unprocessable_entity }
-    end
-#      if @employee.save
-#        format.json { render json: @employee, status: :created, location: @employee }
-#      else
-#        format.json { render json: @employee.errors, status: :unprocessable_entity }
-#      end
     end
   end
 

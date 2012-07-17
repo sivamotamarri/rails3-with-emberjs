@@ -5,7 +5,7 @@
   {{view Ember.TextField valueBinding="first_name" placeholder="First name"}}
   {{view Ember.TextField valueBinding="last_name"  placeholder="Last name"}}
   {{view Ember.TextField valueBinding="city"  placeholder="City"}}
-  {{view Ember.TextField valueBinding="age"  placeholder="Age"}}  
+  {{view Ember.TextField valueBinding="age"  placeholder="Age"}} 
 {{/with}}
 {{/if}}
 {{#if secondStepValue }}
@@ -30,9 +30,11 @@
  {{view Ember.TextField valueBinding="skills"  placeholder="skills"}}
 {{/with}}
  {{/if}}
-  <button type="submit" >
-    {{#if id}}Update{{else}}{{#if lastStepValue }} Submit {{else}}Next{{/if}}{{/if}}
-  </button>
- 
+<div>
+{{#unless firstStepValue }}
+   <div {{action "prevSubmit"}} class="mybutton" id="backBtn"> Prev </div>
+{{/unless}}
+<div {{action "nextSubmit"}} class="mybutton" id="nextBtn">{{#if lastStepValue }} Submit {{else}}Next{{/if}}</div>
+<div {{action "cancelForm"}} class="mybutton">Cancel</div>
+</div>
 
-<a href="#" {{action "cancelForm"}}>Cancel</a>
