@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.3'
+gem 'rails', '3.2.11'
 #gem 'sqlite3'
 
 # Gems used only for assets and not required
@@ -24,6 +24,10 @@ end
 
 group :development, :test do
   gem 'sqlite3'
+end
+
+group :production do
+  gem 'mysql2'
 end
 
 gem 'will_paginate', '~> 3.0'
